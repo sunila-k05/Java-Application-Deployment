@@ -33,7 +33,19 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh 'docker build -t java-application-deployment .'
+
+                
             }
         }
+        stage('Deploy') {
+    steps {
+        sh '''
+        docker stop java-app || true
+        docker rm java-app || true
+        docker run -d -p 8080:8080 --name java-app java-application-deployment
+        '''
+    }
+}
+
     }
 }
